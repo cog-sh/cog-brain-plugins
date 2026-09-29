@@ -45,12 +45,14 @@ Paste this into the client's MCP config — nothing to clone:
     "cog-brain": {
       "type": "stdio",
       "command": "uvx",
-      "args": ["--from", "git+https://github.com/cog-sh/cog-brain", "cog-brain"],
-      "env": { "COG_BRAIN_BACKEND": "sqlite" }
+      "args": ["--from", "git+https://github.com/cog-sh/cog-brain", "cog-brain"]
     }
   }
 }
 ```
+
+The snippet sets no backend: the server reads `COG_BRAIN_*` from its environment
+(your shell or the harness), defaulting to `sqlite` when unset.
 
 ## What the plugin gives you
 
@@ -94,7 +96,8 @@ See [`plugins/cog-brain/evals/README.md`](plugins/cog-brain/evals/README.md).
 
 ## Configuration
 
-Set these in the plugin's `.mcp.json` `env`, or in your shell.
+Set these as environment variables (the plugin declares none, so they are inherited
+by the server on spawn), or in the plugin's `.mcp.json` `env`.
 
 | Variable | Meaning | Default |
 | --- | --- | --- |

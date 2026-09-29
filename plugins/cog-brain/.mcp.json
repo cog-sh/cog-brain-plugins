@@ -3,10 +3,7 @@
     "cog-brain": {
       "type": "stdio",
       "command": "uvx",
-      "args": ["--from", "git+https://github.com/cog-sh/cog-brain", "cog-brain"],
-      "env": {
-        "COG_BRAIN_BACKEND": "sqlite"
-      }
+      "args": ["--from", "git+https://github.com/cog-sh/cog-brain", "cog-brain"]
     }
   }
 }
