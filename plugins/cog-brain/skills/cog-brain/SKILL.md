@@ -72,3 +72,60 @@ hit again:
 | `COG_BRAIN_BACKEND` | `sqlite` (default) · `qdrant` · `markdown` |
 | `COG_BRAIN_STATE_DIR` | index/manifest location |
 | `COG_BRAIN_QDRANT_URL`, `COG_BRAIN_OLLAMA` | only for the `qdrant` backend |
+
+## Vault model
+
+- **One idea per page, densely linked**; a page type is declared in frontmatter `type:`:
+  - `source` — a clipped article/video/chat, claims kept as claims (audit trail);
+  - `entity` — a person/org/product/tool (add `kind:`);
+  - `concept` — the pages that compound; the only type where the agent synthesises;
+  - `synthesis` — only when it says what no single source did. Do not write one just to have one.
+- Layout: `raw/` (sources land, never edited) → `wiki/` (the artifact) with
+  `index.md` (catalog, read first) and `log.md` (one line per operation);
+  `output/` for drafts/reports that later get re-ingested.
+- Frontmatter: `title, type, created, updated, aliases[], tags[]` (+ `url/author/published`
+  for sources, `kind:` for entities). Leave a field out rather than guess.
+
+## Linking
+
+- Link the **first mention** of any concept/entity on every page — both directions.
+  Link, don't restate. A link to a not-yet-existing page is fine — it is a to-do, not a bug.
+- Add the new page's row to its MOC (`update_note` on the MOC) — a note that only sits in
+  the `moc:` field is half-wired.
+- Optional typed links, five relations only, and **only when the source states it**:
+  `supports` · `contradicts` · `extends` · `part-of` · `applies` (inline `rel:: [[X]]`).
+  Typed edges let "what contradicts this page?" be a query.
+
+## Ingest contract
+
+**Nothing is ingested until it is linked.** Every ingest run ends with this block:
+
+```
+Ingested: <source>
+New pages: n — list
+Updated pages: n — list
+Links added: n
+Contradictions found: n
+Gaps created: n
+```
+
+- Search before creating — in a large vault, updating beats creating.
+- Calibration: one source yields **1–3 concept pages**, not a summary per paragraph.
+- Register every operation in `log.md`; a merge counts as a deletion, and nothing is
+  deleted without a log line.
+
+## Contradictions & freshness
+
+- Never overwrite on disagreement: record **both positions**, attributed and dated, plus
+  "what would settle it". Never resolve a contradiction by picking the more recent source.
+- Supersede by strikethrough with a date, never deletion. Keep confidence labels
+  (`stated` / `reported` / `self-reported` / `unverified`) — a self-reported number never
+  loses the label.
+
+## Maintenance
+
+- Mechanical fixes (broken links, format) are applied; **judgement calls** (merges,
+  deletions, renames) are proposed with a diff — never applied silently.
+- The health check is four numbers, not vanity counts: orphan rate (<5% healthy, >15%
+  broken), average degree (3–8), main component (≥~80% of pages), stale concepts
+  (`updated` > 90 days). Report the trend, not the total.
