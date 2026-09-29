@@ -1,6 +1,6 @@
 ---
-name: second-brain
-description: The operator's knowledge base — an Obsidian vault exposed through the `second-brain` MCP server. Use when the user asks to recall something ("what did I record about X", "search my notes"), to save/capture a decision or fact, or when durable project knowledge should outlive the session. Covers hybrid search, reading, safe note writes, the wiki-link graph, and retractions.
+name: cog-brain
+description: The operator's knowledge base — an Obsidian vault exposed through the `cog-brain` MCP server. Use when the user asks to recall something ("what did I record about X", "search my notes"), to save/capture a decision or fact, or when durable project knowledge should outlive the session. Covers hybrid search, reading, safe note writes, the wiki-link graph, and retractions.
 ---
 
 # Second Brain
@@ -68,7 +68,7 @@ hit again:
 
 | var | meaning |
 | --- | --- |
-| `SECOND_BRAIN_VAULT` | vault root (default `~/SECOND_BRAIN`) |
-| `SECOND_BRAIN_BACKEND` | `sqlite` (default) · `qdrant` · `markdown` |
-| `SECOND_BRAIN_STATE_DIR` | index/manifest location |
-| `SECOND_BRAIN_QDRANT_URL`, `SECOND_BRAIN_OLLAMA` | only for the `qdrant` backend |
+| `COG_BRAIN_VAULT` | vault root (default `~/SECOND_BRAIN`) |
+| `COG_BRAIN_BACKEND` | `sqlite` (default) · `qdrant` · `markdown` |
+| `COG_BRAIN_STATE_DIR` | index/manifest location |
+| `COG_BRAIN_QDRANT_URL`, `COG_BRAIN_OLLAMA` | only for the `qdrant` backend |

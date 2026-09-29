@@ -12,14 +12,14 @@
   },
   "plugins": [
     {
-      "name": "second-brain",
-      "source": "./second-brain",
+      "name": "cog-brain",
+      "source": "./cog-brain",
       "description": "Wire the cog-brain MCP server into your agent: Obsidian-vault hybrid search, safe note writes, wiki-link graph, pluggable memory backends.",
       "category": "productivity",
       "homepage": "https://github.com/cog-sh/cog-brain",
       "repository": "https://github.com/cog-sh/cog-brain",
       "license": "MIT",
-      "keywords": ["second-brain", "obsidian", "memory", "mcp", "notes", "knowledge-base"]
+      "keywords": ["cog-brain", "obsidian", "memory", "mcp", "notes", "knowledge-base"]
     }
   ]
 }
