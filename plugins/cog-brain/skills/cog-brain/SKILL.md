@@ -66,6 +66,9 @@ hit again:
 
 ## Backends & configuration (env)
 
+Settings resolve **env → `~/.config/cog-brain/config.toml` → default** (the file is
+TOML, one key per setting: `backend`, `vault`, `qdrant_url`, …).
+
 | var | meaning |
 | --- | --- |
 | `COG_BRAIN_VAULT` | vault root (default `~/SECOND_BRAIN`) |
