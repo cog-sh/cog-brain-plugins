@@ -6,8 +6,8 @@
     "url": "https://github.com/cog-sh"
   },
   "metadata": {
-    "description": "Harness plugins for cog-brain — the agent-agnostic second brain.",
-    "version": "0.1.0",
+    "description": "Harness plugins for cog-brain \u2014 the agent-agnostic second brain.",
+    "version": "0.2.0",
     "pluginRoot": "plugins"
   },
   "plugins": [
@@ -19,7 +19,15 @@
       "homepage": "https://github.com/cog-sh/cog-brain",
       "repository": "https://github.com/cog-sh/cog-brain",
       "license": "MIT",
-      "keywords": ["cog-brain", "obsidian", "memory", "mcp", "notes", "knowledge-base"]
+      "keywords": [
+        "cog-brain",
+        "obsidian",
+        "memory",
+        "mcp",
+        "notes",
+        "knowledge-base"
+      ],
+      "version": "0.2.0"
     }
   ]
 }

@@ -1,9 +1,17 @@
 {
   "name": "cog-brain",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "cog-brain: MCP server + skill + commands wiring an Obsidian vault as an agent second brain.",
-  "author": { "name": "cog-sh", "url": "https://github.com/cog-sh" },
+  "author": {
+    "name": "cog-sh",
+    "url": "https://github.com/cog-sh"
+  },
   "homepage": "https://github.com/cog-sh/cog-brain",
   "license": "MIT",
-  "keywords": ["cog-brain", "obsidian", "memory", "mcp"]
+  "keywords": [
+    "cog-brain",
+    "obsidian",
+    "memory",
+    "mcp"
+  ]
 }
