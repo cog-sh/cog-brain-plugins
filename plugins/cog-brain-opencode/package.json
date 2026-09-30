@@ -1,0 +1,26 @@
+{
+  "name": "cog-brain-opencode",
+  "version": "0.2.0",
+  "description": "cog-brain for opencode: declares the MCP server so the vault is reachable without editing opencode.json.",
+  "license": "MIT",
+  "type": "module",
+  "main": "cog-brain.js",
+  "exports": {
+    ".": "./cog-brain.js"
+  },
+  "files": [
+    "cog-brain.js",
+    "install.sh",
+    "README.md"
+  ],
+  "keywords": [
+    "opencode",
+    "opencode-plugin",
+    "cog-brain",
+    "obsidian",
+    "memory",
+    "mcp"
+  ],
+  "homepage": "https://github.com/cog-sh/cog-brain",
+  "repository": "https://github.com/cog-sh/cog-brain-plugins"
+}

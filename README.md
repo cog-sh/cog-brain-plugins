@@ -4,10 +4,11 @@
 
 **Harness plugins for [cog-brain](https://github.com/cog-sh/cog-brain) — the agent-agnostic second brain.**
 
-One marketplace. A plugin per harness. Works with omp, Claude Code, and anything that speaks MCP.
+One marketplace. A plugin per harness. Works with omp, Claude Code, opencode, and anything that speaks MCP.
 
 ![omp](https://img.shields.io/badge/oh--my--pi-plugin-6f42c1)
 ![claude](https://img.shields.io/badge/Claude%20Code-plugin-D97757)
+![opencode](https://img.shields.io/badge/opencode-plugin-000000)
 ![mcp](https://img.shields.io/badge/MCP-stdio-8A2BE2)
 ![license](https://img.shields.io/badge/license-MIT-green)
 
@@ -34,6 +35,18 @@ Restart the session for newly installed tools/hooks.
 claude plugin marketplace add cog-sh/cog-brain-plugins
 claude plugin install cog-brain@cog-brain-plugins
 ```
+
+### opencode
+
+```bash
+git clone https://github.com/cog-sh/cog-brain-plugins
+cd cog-brain-plugins/plugins/cog-brain-opencode
+./install.sh                    # global; --project <dir> for one project
+```
+
+No `opencode.json` edit: the plugin declares the MCP server itself. Restart opencode,
+then `opencode mcp list` → `✓ cog-brain connected`. See
+[`plugins/cog-brain-opencode/README.md`](plugins/cog-brain-opencode/README.md).
 
 ### Any other MCP client
 
@@ -75,7 +88,22 @@ flowchart LR
   P --> C["commands<br/>/brain-*"]
   P --> X[".mcp.json<br/>cog-brain server"]
   X --> H["your harness"]
+  O["plugins/cog-brain-opencode<br/>opencode plugin"] --> Y["mcp.cog-brain<br/>config hook"]
+  Y --> H
 ```
+
+### opencode layout
+
+opencode has no marketplace, so `plugins/cog-brain-opencode/` ships its own installer and
+a `package.json`:
+
+| Path | Role |
+| --- | --- |
+| `cog-brain.js` | the plugin — `config` hook declares `mcp["cog-brain"]`, env-free |
+| `install.sh` | copies plugin + skill + commands into `~/.config/opencode/` (or a project) |
+| `skills/`, `commands/` | **not** stored here — copied from `plugins/cog-brain/` at install time |
+
+Same skill, same `/brain-*` commands, same server — only the wiring differs.
 
 ## Conventions the skill enforces
 
@@ -104,9 +132,15 @@ by the server on spawn), or in the plugin's `.mcp.json` `env`.
 | `COG_BRAIN_VAULT` | Obsidian vault root | `~/SECOND_BRAIN` |
 | `COG_BRAIN_BACKEND` | `sqlite` · `qdrant` · `markdown` | `sqlite` |
 | `COG_BRAIN_STATE_DIR` | index + manifest location | `~/.local/state/cog-brain` |
+| `COG_BRAIN_MCP_SOURCE` | source `uvx` launches the server from | `git+https://github.com/cog-sh/cog-brain` |
 
 ## Add another harness
 
-Create `plugins/<name>/` with the same shape (`.mcp.json`, `skills/`, `commands/`,
-`.claude-plugin/plugin.json`) and add an entry to both catalogs. Details in
-[`AGENTS.md`](AGENTS.md).
+Marketplace harnesses (omp, Claude Code): create `plugins/<name>/` with the same shape
+(`.mcp.json`, `skills/`, `commands/`, `.claude-plugin/plugin.json`) and add an entry to
+both catalogs.
+
+Harnesses without a marketplace (opencode): create `plugins/<name>-<harness>/` with a
+`package.json`, the plugin/code file, and an `install.sh` that copies the shared skill
+and commands out of `plugins/cog-brain/` — no catalog entry, the installer is the
+install path. Details in [`AGENTS.md`](AGENTS.md).

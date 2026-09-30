@@ -19,9 +19,16 @@ plugins/cog-brain/                 # the plugin
   skills/cog-brain/SKILL.md        # the vault conventions
   commands/brain-*.md              # thin scoped entry points
   evals/                          # claude plugin eval suite (prompt.md + graders/)
+plugins/cog-brain-opencode/        # opencode plugin (no marketplace → installer)
+  package.json                     # npm shape, so `opencode plugin file://…` works
+  cog-brain.js                     # plugin: config hook declares mcp["cog-brain"]
+  install.sh                       # copies plugin + shared skill + shared commands
+  README.md
 ```
 
 ## Add a harness plugin
+
+Marketplace harnesses (omp, Claude Code):
 
 1. `plugins/<name>/` with:
    - `plugins/<name>/.claude-plugin/plugin.json` — `{name, version, description}`;
@@ -32,6 +39,14 @@ plugins/cog-brain/                 # the plugin
 3. Keep the server declaration identical across harnesses — only the surrounding
    plugin layout differs.
 
+Harnesses with no marketplace (opencode, …): `plugins/<name>-<harness>/` instead, with
+`package.json` + the code file + an `install.sh` that copies the plugin **and** the
+shared `plugins/cog-brain/{skills,commands}` into the harness config dir. No catalog
+entry — the catalogs are marketplace-only, and listing an opencode plugin there would
+offer omp/Claude users something their harness ignores. Same rule applies: the vault
+conventions stay in the one `SKILL.md`; the installer copies, the repo does not
+duplicate.
+
 ## Conventions
 
 - **`README.md` is for humans; `AGENTS.md` is for agents.** Keep them separate.
@@ -41,6 +56,11 @@ plugins/cog-brain/                 # the plugin
   — do not duplicate them into commands (commands are thin entry points).
 - Catalogs must be valid JSON; `omp plugin marketplace add ./…` and
   `claude plugin validate plugins/cog-brain` are the quick checks.
+- opencode plugin quick check: install into a scratch project
+  (`./install.sh --project /tmp/oc-check`) and run `opencode debug config` there —
+  `mcp["cog-brain"]` must appear (the plugin injects it) — then `opencode mcp list`
+  for `✓ cog-brain connected`. opencode loads config once at startup, so never test
+  against a running session.
 
 ## Evals
 
