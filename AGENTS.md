@@ -21,7 +21,7 @@ plugins/cog-brain/                 # the plugin
   evals/                          # claude plugin eval suite (prompt.md + graders/)
 plugins/cog-brain-opencode/        # opencode plugin (no marketplace → installer)
   package.json                     # npm shape, so `opencode plugin file://…` works
-  cog-brain.js                     # plugin: config hook declares mcp["cog-brain"]
+  cog-brain.js                     # plugin: declares the cog-brain MCP server (v2 ctx.mcp.transform, v1 config hook)
   install.sh                       # copies plugin + shared skill + shared commands
   README.md
 ```
@@ -57,10 +57,19 @@ duplicate.
 - Catalogs must be valid JSON; `omp plugin marketplace add ./…` and
   `claude plugin validate plugins/cog-brain` are the quick checks.
 - opencode plugin quick check: install into a scratch project
-  (`./install.sh --project /tmp/oc-check`) and run `opencode debug config` there —
-  `mcp["cog-brain"]` must appear (the plugin injects it) — then `opencode mcp list`
-  for `✓ cog-brain connected`. opencode loads config once at startup, so never test
-  against a running session.
+  (`./install.sh --project /tmp/oc-check`), then run `opencode mcp list` there —
+  `✓ cog-brain connected`. `opencode debug config` lists file configs only, so a
+  plugin-injected server never shows up there; `opencode plugin list` shows the
+  plugin itself. opencode loads config once at startup, so never test against a
+  running session.
+- opencode plugin API: 2.x wants a default export `{ id, setup(ctx) }` and registers
+  servers through `ctx.mcp.transform`; 1.x (1.18.29+) accepts the same object and
+  calls `server()`. A v1-only plugin file fails to load on 2.x with
+  `PluginModule.LoadError` — keep both paths in one file.
+- encoded MCP config differs between the APIs: `timeout` is an object
+  (`{ startup, catalog, execution }`) on 2.x and a single number of milliseconds
+  on 1.x. A scalar timeout fails 2.x schema validation and opencode disables the
+  plugin.
 
 ## Evals
 

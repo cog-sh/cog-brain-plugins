@@ -8,6 +8,23 @@ one reason: **the MCP server declaration lives in the plugin, not in your
 `opencode.json`** — and it is env-free, so the server is spawned with whatever
 `COG_BRAIN_*` your shell exports.
 
+## opencode 1.x and 2.x
+
+One file serves both plugin APIs:
+
+| opencode | Entry point | How the server is declared |
+| --- | --- | --- |
+| 2.x | `setup(ctx)` | `ctx.mcp.transform((editor) => editor.set("cog-brain", …))` |
+| 1.x (1.18.29+) | `server()` | the v1 `config` hook mutating `cfg.mcp` |
+
+opencode 2.x dropped the v1 plugin API — a v2 plugin default-exports a definition with
+an `id` and a `setup(ctx)`, and there is no mutable global config object anymore, so
+the old `config` hook has no place to write. See
+[the v1 → v2 migration guide](https://opencode.ai/v2/docs/build/plugins/migrate-v1).
+
+Note the timeout shape differs between the two APIs: v2 wants an object
+(`{ startup, catalog, execution }`), v1 wants a single number of milliseconds.
+
 ## Install
 
 ```bash
@@ -32,9 +49,12 @@ opencode plugin --global file://$PWD/cog-brain.js
 
 ```bash
 opencode mcp list        # → ✓ cog-brain connected
-opencode debug config    # → mcp["cog-brain"] …, plugin: [… cog-brain.js]
+opencode plugin list     # → cog-brain …/plugins/cog-brain.js
 opencode debug skill     # → cog-brain …/skill/cog-brain/SKILL.md
 ```
+
+The server is injected by the plugin at runtime, so `opencode debug config` (file
+configs only) does not list it — `opencode mcp list` is the check that matters.
 
 Then, in a session:
 
@@ -46,7 +66,7 @@ Then, in a session:
 
 | Scope | Path | Role |
 | --- | --- | --- |
-| global | `~/.config/opencode/plugins/cog-brain.js` | the plugin: declares `mcp["cog-brain"]` |
+| global | `~/.config/opencode/plugins/cog-brain.js` | the plugin: declares the `cog-brain` MCP server |
 | global | `~/.config/opencode/skill/cog-brain/SKILL.md` | vault conventions (auto-discovered) |
 | global | `~/.config/opencode/command/brain-*.md` | `/brain-search`, `/brain-capture`, … (auto-discovered) |
 | project | `<dir>/.opencode/{plugins,skill,command}/…` | same three, scoped to that project |

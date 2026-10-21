@@ -44,8 +44,9 @@ cd cog-brain-plugins/plugins/cog-brain-opencode
 ./install.sh                    # global; --project <dir> for one project
 ```
 
-No `opencode.json` edit: the plugin declares the MCP server itself. Restart opencode,
-then `opencode mcp list` → `✓ cog-brain connected`. See
+No `opencode.json` edit: the plugin declares the MCP server itself (opencode 2.x via
+`ctx.mcp.transform`, opencode 1.x via the `config` hook — one file, both APIs).
+Restart opencode, then `opencode mcp list` → `✓ cog-brain connected`. See
 [`plugins/cog-brain-opencode/README.md`](plugins/cog-brain-opencode/README.md).
 
 ### Any other MCP client
@@ -88,7 +89,7 @@ flowchart LR
   P --> C["commands<br/>/brain-*"]
   P --> X[".mcp.json<br/>cog-brain server"]
   X --> H["your harness"]
-  O["plugins/cog-brain-opencode<br/>opencode plugin"] --> Y["mcp.cog-brain<br/>config hook"]
+  O["plugins/cog-brain-opencode<br/>opencode plugin"] --> Y["mcp.cog-brain<br/>plugin declares it"]
   Y --> H
 ```
 
@@ -99,7 +100,7 @@ a `package.json`:
 
 | Path | Role |
 | --- | --- |
-| `cog-brain.js` | the plugin — `config` hook declares `mcp["cog-brain"]`, env-free |
+| `cog-brain.js` | the plugin — declares the `cog-brain` MCP server (v2 `ctx.mcp.transform`, v1 `config` hook), env-free |
 | `install.sh` | copies plugin + skill + commands into `~/.config/opencode/` (or a project) |
 | `skills/`, `commands/` | **not** stored here — copied from `plugins/cog-brain/` at install time |
 

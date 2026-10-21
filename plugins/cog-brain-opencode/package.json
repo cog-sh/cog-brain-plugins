@@ -1,6 +1,6 @@
 {
   "name": "cog-brain-opencode",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "cog-brain for opencode: declares the MCP server so the vault is reachable without editing opencode.json.",
   "license": "MIT",
   "type": "module",
